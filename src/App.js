@@ -2,7 +2,7 @@ import React from 'react'
 import Add from './Components/Add'
 import View from './Components/View'
 import { Routes, Route } from 'react-router-dom'
-import Player from './Components/Player'
+import Player from './Components/Player/Player'
 function App() {
   return (
      <>
