@@ -9,6 +9,8 @@ import PauseIcon from '@mui/icons-material/Pause';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import FullScreenIcon from '@mui/icons-material/Fullscreen';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import SubtitlesIcon from '@mui/icons-material/Subtitles';
+import playback from '../../assets/speed.svg';  // imported playback image
 import { styled } from '@mui/system';
 
 // Styles
@@ -38,6 +40,10 @@ const useStyles = makeStyles({
             color: "#fff",
         },
     },
+    playBackIcon: {
+        filter: 'invert(100%)',
+        fontSize: 70,
+    },
 });
 
 const PrettoSlider = styled(Slider)({
@@ -62,7 +68,12 @@ const ValueLabelComponent = (props) => {
     );
 };
 
-const PlayControls = forwardRef(({ playerRef, playing, onRewind, onFastForward, onProgressChange, onVolumeSeekUp, onToggleFullScreen, played, setPlayed, playBackRate, onPlayBackChange, volume, onVolumeChange, onPlayPause, onMute, muted, onSeek, onSeekMouseUp, onMouseDown, elapsedTime, totalDuration, ref }) => {
+const PlayControls = forwardRef(({
+    playerRef, playing, onRewind, onFastForward, onProgressChange, onVolumeSeekUp,
+    onToggleFullScreen, played, setPlayed, playBackRate, onPlayBackChange,
+    volume, onVolumeChange, onPlayPause, onMute, muted, onSeek, onSeekMouseUp,
+    onMouseDown, elapsedTime, totalDuration, ref
+}) => {
 
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState(null);
@@ -77,7 +88,6 @@ const PlayControls = forwardRef(({ playerRef, playing, onRewind, onFastForward, 
 
     const open = Boolean(anchorEl);
     const id = open ? 'playbackrate-popover' : undefined;
-
 
     return (
         <div className={classes.containerWrapper} ref={ref}>
@@ -117,9 +127,6 @@ const PlayControls = forwardRef(({ playerRef, playing, onRewind, onFastForward, 
                         onChangeCommitted={onSeekMouseUp}
                         ValueLabelComponent={ValueLabelComponent}
                     />
-
-
-
                 </Grid>
 
                 {/* Volume Control */}
@@ -136,9 +143,14 @@ const PlayControls = forwardRef(({ playerRef, playing, onRewind, onFastForward, 
                     </Grid>
                 </Grid>
 
+                {/* Playback rate and Fullscreen controls */}
                 <Grid item>
+                    <Button variant='text' style={{ color: 'white' }}>
+                        <SubtitlesIcon />
+                    </Button>
                     <Button variant='text' onClick={handleClick} className={classes.bottomIcons}>
-                        <Typography color="#fff">{playBackRate}</Typography>
+                        {/* Use the playback image as the play speed icon */}
+                        <img src={playback} alt="Playback Rate" className={classes.playBackIcon} />
                     </Button>
                     <Popover
                         id={id}
@@ -153,17 +165,23 @@ const PlayControls = forwardRef(({ playerRef, playing, onRewind, onFastForward, 
                             vertical: 'bottom',
                             horizontal: 'center',
                         }}
+                        PaperProps={{
+                            style: {
+                                zIndex: 1300, // Make sure the popover is above other components
+                            },
+                        }}
                     >
                         <Grid container direction="column-reverse">
-                            {
-                                [0.5, 1, 1.5, 2].map((rate) => (
-                                    <Button variant='text' onClick={() => onPlayBackChange(rate)}>
-                                        <Typography color={rate === playBackRate ? 'secondary' : 'default'}>{rate} X</Typography>
-                                    </Button>
-                                ))
-                            }
+                            {[0.5, 1, 1.5, 2].map((rate) => (
+                                <Button key={rate} variant='text' onClick={() => onPlayBackChange(rate)}>
+                                    <Typography color={rate === playBackRate ? 'secondary' : 'default'}>
+                                        {rate}x
+                                    </Typography>
+                                </Button>
+                            ))}
                         </Grid>
                     </Popover>
+
                     <IconButton className={classes.bottomIcons} onClick={onToggleFullScreen}>
                         <FullScreenIcon style={{ fontSize: "large", color: "#fff" }} />
                     </IconButton>

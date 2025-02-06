@@ -3,7 +3,7 @@ import ReactPlayer from 'react-player';
 import { Container } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import PlayControls from './PlayControls';
-import source from '../../assets/source.mp4';
+import source from '../../assets/video.mp4';
 import screenfull from 'screenfull';
 
 const useStyles = makeStyles({
